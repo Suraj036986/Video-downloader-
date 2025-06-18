@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidFetch Pro - YouTube Video Downloader</title>
+    <meta name="description" content="Download YouTube videos and audio in high quality formats (MP4, MP3, WEBM) with our fast, secure, and mobile-friendly YouTube downloader tool.">
+    <meta name="keywords" content="youtube downloader, mp4 download, mp3 converter, 4k video download, online yt converter">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f0c29;
+            --card-bg: #1a1a40;
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent-primary: #00d2ff;
+            --accent-secondary: #ff6b6b;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0d0;
+            --gradient-primary: linear-gradient(135deg, var(--accent-primary), #3a7bd5);
+            --gradient-secondary: linear-gradient(135deg, var(--accent-secondary), #ff8e53);
+            --shadow-primary: 0 10px 30px rgba(0, 210, 255, 0.25);
+            --shadow-secondary: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 210, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 107, 107, 0.1) 0%, transparent 20%);
+            color: var(--text-primary);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            padding: 25px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-primary);
+        }
+
+        .logo-icon i {
+            font-size: 24px;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(to right, var(--accent-primary), var(--text-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 40px 0 60px;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero h1 .highlight {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.7;
+        }
+
+        /* Input Card */
+        .input-card {
+            background: rgba(26, 26, 64, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+            animation: cardAppear 0.8s ease 0.4s both;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 20px 25px;
+            border-radius: 15px;
+            border: none;
+            background: rgba(30, 30, 70, 0.8);
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 0 0 1px rgba(0, 210, 255, 0.3);
+        }
+
+        .input-group input:focus {
+            box-shadow: inset 0 0 0 2px var(--accent-primary), 0 0 20px rgba(0, 210, 255, 0.3);
+        }
+
+        .input-group input::placeholder {
+            color: #6a6a8f;
+        }
+
+        .btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 210, 255, 0.4);
+        }
+
+        .btn:hover::after {
+            transform: translateX(0);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--gradient-secondary);
+            box-shadow: var(--shadow-secondary);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Preview Section */
+        .preview-section {
+            display: none;
+            margin-top: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .preview-card {
+            background: rgba(30, 30, 70, 0.6);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .preview-image {
+            height: 240px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .preview-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background: linear-gradient(to top, rgba(15, 12, 41, 0.9), transparent);
+        }
+
+        .preview-content {
+            padding: 30px;
+        }
+
+        .preview-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .video-info {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .info-item i {
+            color: var(--accent-primary);
+        }
+
+        .formats {
+            margin-top: 20px;
+        }
+
+        .formats h4 {
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .formats h4::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(92, 92, 160, 0.3);
+        }
+
+        .format-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .format-option {
+            background: rgba(40, 40, 80, 0.6);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .format-option:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .format-option.active {
+            border-color: var(--accent-primary);
+            background: rgba(0, 210, 255, 0.1);
+            box-shadow: 0 10px 20px rgba(0, 210, 255, 0.15);
+        }
+
+        .format-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .format-info h5 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+
+        .format-info p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Status Section */
+        .status-section {
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .status-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 50px 30px;
+            display: none;
+            border: 1px solid var(--card-border);
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .status-icon {
+            font-size: 4rem;
+            margin-bottom: 25px;
+            color: var(--accent-primary);
+        }
+
+        .status-text {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .status-card p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto 30px;
+            line-height: 1.7;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--accent-primary);
+            animation: spin 1.2s linear infinite;
+            margin: 0 auto 30px;
+        }
+
+        /* Devices Section */
+        .devices-section {
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+        }
+
+        .devices {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .device {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .device:hover {
+            transform: translateY(-10px);
+        }
+
+        .device-icon {
+            width: 90px;
+            height: 90px;
+            background: var(--card-bg);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: var(--accent-primary);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+
+        .device:hover .device-icon {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow-primary);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-top: 80px;
+        }
+
+        .faq-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(92, 92, 160, 0.2);
+            padding: 25px 30px;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            background: rgba(40, 40, 80, 0.4);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+            color: var(--accent-primary);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 1.05rem;
+            padding-top: 0;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding-top: 20px;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(15, 12, 41, 0.9);
+            padding: 50px 0 30px;
+            margin-top: 80px;
+            border-top: 1px solid rgba(92, 92, 160, 0.2);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--accent-primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-primary);
+            transform: translateX(5px);
+        }
+
+        .copyright {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            padding-top: 30px;
+            border-top: 1px solid rgba(92, 92, 160, 0.2);
+        }
+
+        /* Help Button */
+        .help-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: var(--shadow-primary);
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .help-btn:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 10px 30px rgba(0, 210, 255, 0.5);
+            animation: none;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 210, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.3rem;
+            }
+            
+            .input-card {
+                padding: 25px;
+            }
+            
+            .format-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .device-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <div class="logo-text">VidFetch Pro</div>
+            </div>
+        </header>
+
+        <section class="hero">
+            <h1>Download <span class="highlight">YouTube Videos</span> in 4K Quality</h1>
+            <p>Fast, secure, and free YouTube video downloader. Get MP4, MP3, WEBM files in up to 4K resolution. No registration required.</p>
+        </section>
+
+        <section class="input-card">
+            <div class="input-group">
+                <input type="text" id="youtube-url" placeholder="Paste YouTube video link here..." autocomplete="off" value="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+                <button id="analyze-btn" class="btn">
+                    <i class="fas fa-bolt"></i> Analyze Video
+                </button>
+            </div>
+
+            <div class="preview-section" id="preview-section">
+                <div class="preview-card">
+                    <div class="preview-image" style="background-image: url('https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg');"></div>
+                    <div class="preview-content">
+                        <h3>Never Gonna Give You Up - Rick Astley</h3>
+                        <div class="video-info">
+                            <div class="info-item">
+                                <i class="fas fa-clock"></i>
+                                <span>3:32</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>Oct 25, 2009</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-eye"></i>
+                                <span>1.4B views</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span>15M likes</span>
+                            </div>
+                        </div>
+                        
+                        <div class="formats">
+                            <h4><i class="fas fa-file-download"></i> Select Download Format</h4>
+                            <div class="format-options">
+                                <div class="format-option active" data-format="mp4-1080">
+                                    <div class="format-icon">
+                                        <i class="fas fa-hd"></i>
+                                    </div>
+                                    <div class="format-info">
+                                        <h5>MP4 1080p</h5>
+                                        <p>High Quality (HD)</p>
+                                    </div>
+                                </div>
+                                <div class="format-option" data-format="mp4-4k">
+                                    <div class="format-icon">
+                                        <i class="fas fa-film"></i>
+                                    </div>
+                                    <div class="format-info">
+                                        <h5>MP4 4K</h5>
+                                        <p>Ultra HD Quality</p>
+                                    </div>
+                                </div>
+                                <div class="format-option" data-format="mp3">
+                                    <div class="format-icon">
+                                        <i class="fas fa-music"></i>
+                                    </div>
+                                    <div class="format-info">
+                                        <h5>MP3 Audio</h5>
+                                        <p>High Quality Sound</p>
+                                    </div>
+                                </div>
+                                <div class="format-option" data-format="webm">
+                                    <div class="format-icon">
+                                        <i class="fab fa-chrome"></i>
+                                    </div>
+                                    <div class="format-info">
+                                        <h5>WEBM Format</h5>
+                                        <p>Web Optimized</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button id="download-btn" class="btn btn-secondary" style="width: 100%; margin-top: 25px;">
+                            <i class="fas fa-download"></i> Download Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="status-section">
+            <div class="status-card" id="analyzing-status">
+                <div class="spinner"></div>
+                <div class="status-text">Analyzing Video...</div>
+                <p>We're fetching video information for download options. This usually takes 10-15 seconds.</p>
+            </div>
+            
+            <div class="status-card" id="processing-status">
+                <div class="status-icon">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <div class="status-text">Processing Your Request...</div>
+                <p>Preparing your download in the selected format. Please wait while we process the video.</p>
+            </div>
+            
+            <div class="status-card" id="ready-status">
+                <div class="status-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="status-text">Download Ready!</div>
+                <p>Your file is prepared for download. Click the button below to start downloading.</p>
+                <button class="btn" style="margin-top: 25px;">
+                    <i class="fas fa-download"></i> Download Now
+                </button>
+            </div>
+        </section>
+
+        <section class="devices-section">
+            <h3 class="section-title">Works Everywhere</h3>
+            <div class="devices">
+                <div class="device">
+                    <div class="device-icon">
+                        <i class="fab fa-android"></i>
+                    </div>
+                    <span>Android</span>
+                </div>
+                <div class="device">
+                    <div class="device-icon">
+                        <i class="fab fa-apple"></i>
+                    </div>
+                    <span>iPhone</span>
+                </div>
+                <div class="device">
+                    <div class="device-icon">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <span>Windows PC</span>
+                </div>
+                <div class="device">
+                    <div class="device-icon">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <span>Mac OS</span>
+                </div>
+                <div class="device">
+                    <div class="device-icon">
+                        <i class="fas fa-tablet-alt"></i>
+                    </div>
+                    <span>Tablet</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <h3 class="section-title">Frequently Asked Questions</h3>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Is this YouTube downloader free to use?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, our YouTube downloader is completely free to use. There are no hidden charges or subscription fees. You can download as many videos as you want without any limitations.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Is it legal to download YouTube videos?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Downloading YouTube videos is against YouTube's Terms of Service. However, many users download videos for personal offline viewing. We recommend only downloading videos you have rights to or for personal use, and never redistribute copyrighted content without permission.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What is the maximum video quality available?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Our downloader supports up to 4K Ultra HD quality for compatible videos. The available resolutions depend on the original video's quality settings on YouTube.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Can I download YouTube videos on mobile?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Absolutely! Our website is fully responsive and works on all mobile devices including Android and iOS smartphones and tablets. The process is the same as on desktop.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How long does it take to process a video?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Processing time depends on the video length and quality. Typically, it takes between 15-60 seconds. 4K videos may take slightly longer to process.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>VidFetch Pro</h3>
+                    <p style="color: var(--text-secondary); line-height: 1.7; max-width: 300px;">
+                        The fastest and most reliable YouTube video downloader. Download videos in HD, 4K, and audio formats with ease.
+                    </p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Features</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Copyright Policy</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Disclaimer</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 VidFetch Pro. This tool is for educational purposes only. YouTube is a trademark of Google Inc.
+            </div>
+        </div>
+    </footer>
+
+    <div class="help-btn">
+        <i class="fas fa-headset"></i>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const analyzeBtn = document.getElementById('analyze-btn');
+            const downloadBtn = document.getElementById('download-btn');
+            const youtubeUrl = document.getElementById('youtube-url');
+            const previewSection = document.getElementById('preview-section');
+            const analyzingStatus = document.getElementById('analyzing-status');
+            const processingStatus = document.getElementById('processing-status');
+            const readyStatus = document.getElementById('ready-status');
+            const formatOptions = document.querySelectorAll('.format-option');
+            
+            // Initially hide status cards
+            analyzingStatus.style.display = 'none';
+            processingStatus.style.display = 'none';
+            readyStatus.style.display = 'none';
+            
+            // Show preview section for demo
+            previewSection.style.display = 'block';
+
+            // FAQ functionality
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const faqItem = question.parentElement;
+                    faqItem.classList.toggle('active');
+                });
+            });
+            
+            // Format selection
+            formatOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    formatOptions.forEach(opt => opt.classList.remove('active'));
+                    option.classList.add('active');
+                });
+            });
+            
+            // Analyze button functionality
+            analyzeBtn.addEventListener('click', () => {
+                const url = youtubeUrl.value.trim();
+                
+                if (!url) {
+                    showNotification('Please enter a YouTube URL', 'error');
+                    return;
+                }
+                
+                if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+                    showNotification('Please enter a valid YouTube URL', 'error');
+                    return;
+                }
+                
+                // Show analyzing status
+                analyzingStatus.style.display = 'block';
+                previewSection.style.display = 'none';
+                processingStatus.style.display = 'none';
+                readyStatus.style.display = 'none';
+                
+                // Simulate analyzing delay
+                setTimeout(() => {
+                    analyzingStatus.style.display = 'none';
+                    previewSection.style.display = 'block';
+                    showNotification('Video analyzed successfully!', 'success');
+                }, 2000);
+            });
+            
+            // Download button functionality
+            downloadBtn.addEventListener('click', () => {
+                // Show processing status
+                processingStatus.style.display = 'block';
+                previewSection.style.display = 'none';
+                analyzingStatus.style.display = 'none';
+                readyStatus.style.display = 'none';
+                
+                // Simulate processing delay
+                setTimeout(() => {
+                    processingStatus.style.display = 'none';
+                    readyStatus.style.display = 'block';
+                    showNotification('Your download is ready!', 'success');
+                }, 2500);
+            });
+            
+            // Helper function to show notifications
+            function showNotification(message, type) {
+                // In a real app, you would show a nice notification
+                console.log(`${type.toUpperCase()}: ${message}`);
+            }
+        });
+    </script>
+</body>
+</html>
